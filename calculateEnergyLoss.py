@@ -56,22 +56,6 @@ def print_summary_table(avg_g_forces, energy_losses):
     print("------------------------------------------------------------------------------------------")
 
 
-def make_plot_2(average_g_forces, energy_losses):
-    """
-    Plot values of energy loss (vertical axis) versus average G force (horizontal axis).
-    :param average_g_forces: array of average g forces
-    :param energy_losses: array of energy losses
-    """
-    # plot the points and line of best fit
-    plt.plot(np.unique(average_g_forces), np.poly1d(np.polyfit(average_g_forces, energy_losses, 1))(np.unique(average_g_forces)))
-    # label the x and y axis
-    plt.xlabel("average G force")
-    plt.ylabel("energy loss")
-    # title of the graph
-    plt.title("Plot 2")
-    plt.show()
-
-
 def make_plot(name, x, y, x_label, y_label):
     """
     Plot values with graph title name, x label, and y label using x and y values passed in.
