@@ -56,23 +56,6 @@ def print_summary_table(avg_g_forces, energy_losses):
     print("------------------------------------------------------------------------------------------")
 
 
-def make_plot_1(energy_losses, velocities):
-    """
-    Plot energy losses vs. Inlet velocity for each release point and call it Plot 1.
-    Vertical axis will be "energy loss" and horizontal axis will be "inlet velocity".
-    :param energy_losses: array of energy losses
-    :param velocities: array of inlet velocities for each release point
-    """
-    # plot the points and line of best fit
-    plt.plot(np.unique(velocities), np.poly1d(np.polyfit(velocities, energy_losses, 1))(np.unique(velocities)))
-    # label the x and y axis
-    plt.xlabel("inlet velocity")
-    plt.ylabel("energy loss")
-    # title of the graph
-    plt.title("Plot 1")
-    plt.show()
-
-
 def make_plot_2(average_g_forces, energy_losses):
     """
     Plot values of energy loss (vertical axis) versus average G force (horizontal axis).
@@ -88,6 +71,24 @@ def make_plot_2(average_g_forces, energy_losses):
     plt.title("Plot 2")
     plt.show()
 
+
+def make_plot(name, x, y, x_label, y_label):
+    """
+    Plot values with graph title name, x label, and y label using x and y values passed in.
+    :param name: title of the graph
+    :param x: horizontal axis values
+    :param y: vertical axis values
+    :param x_label: label for horizontal axis
+    :param y_label: label for vertical axis
+    """
+    # plot the points and line of best fit
+    plt.plot(np.unique(x), np.poly1d(np.polyfit(x, y, 1))(np.unique(x)))
+    # label the x and y axis
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    # title of the graph
+    plt.title(name)
+    plt.show()
 
 # ====================================================================
 # MAIN
@@ -162,7 +163,6 @@ print()
 print_summary_table(energy_losses, avg_g_forces)
 
 # Plot energy losses versus inlet velocity for each release point
-make_plot_1(energy_losses, inlet_velocities)
-
+make_plot("Plot 1", energy_losses, inlet_velocities, "inlet velocity", "energy loss")
 # Plot values of energy loss versus average G force
-make_plot_2(avg_g_forces, energy_losses)
+make_plot("Plot 2", avg_g_forces, energy_losses, "average G force", "energy loss")
