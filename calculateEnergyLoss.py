@@ -20,7 +20,7 @@ GRAVITY = 9.81  # unit: m/s^2, gravitational pull
 # ====================================================================
 # FUNCTIONS
 # ====================================================================
-def calculate_energy_loss(velocity1: float, velocity2: float):
+def calculate_energy_loss(velocity1: float, velocity2: float) -> float:
     temp1 = (G_BALL_RADIUS ** 2) / (R_BALL_RADIUS ** 2)
     temp1 *= 1.0 / 5
     temp1 += 0.5
@@ -30,14 +30,14 @@ def calculate_energy_loss(velocity1: float, velocity2: float):
     return temp1 * temp2
 
 
-def calculate_g_force(v_in, v_out, r_h):
+def calculate_g_force(v_in, v_out, r_h) -> float:
     temp = (v_in + v_out) / 2.0
     temp = temp ** 2
     average_g_force = temp / (r_h * GRAVITY)
     return average_g_force
 
 
-def get_average(values):
+def get_average(values) -> float:
     avg = 0
     for number in values:
         avg += number
@@ -83,6 +83,7 @@ energy_losses = []
 inlet_velocities = []
 radii = [0.23, 0.2225, 0.25, 0.205]
 avg_radius = get_average(radii)
+print(avg_radius)
 # Release point 1
 print("Release Point 1...\n")
 sensor_1_velocities = [0.8133333, 0.953333, 0.89, 1.03, 0.946667]
