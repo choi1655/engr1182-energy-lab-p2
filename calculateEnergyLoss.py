@@ -56,7 +56,8 @@ def print_summary_table_1(avg_g_forces, energy_losses):
 
 def print_summary_table_2(energy_loss, avg_g_forces, energy_loss_actual):
     print("Printing Table 2\n")
-    print("% 30s% 30s% 30s% 30s" % ("Release Point", "E-Loss Calc (J)", "Average G Force", "Energy Loss actual - calc (J)"))
+    print("% 30s% 30s% 30s% 30s" % (
+    "Release Point", "E-Loss Calc (J)", "Average G Force", "Energy Loss actual - calc (J)"))
     print("------------------------------------------------------------------------------------------")
     for i in range(0, len(energy_loss)):
         print("% 30d% 30f% 30f% 30f" % (i + 1, energy_loss[i], avg_g_forces[i], energy_loss_actual[i]))
@@ -82,6 +83,7 @@ def make_plot(name, x, y, x_label, y_label):
     plt.title(name)
     plt.show()
 
+
 # ====================================================================
 # MAIN
 # ====================================================================
@@ -91,7 +93,6 @@ energy_losses = []
 inlet_velocities = []
 radii = [0.23, 0.2225, 0.25, 0.205]
 avg_radius = get_average(radii)
-print(avg_radius)
 # Release point 1
 print("Release Point 1...\n")
 sensor_1_velocities = [0.8133333, 0.953333, 0.89, 1.03, 0.946667]
