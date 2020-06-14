@@ -44,14 +44,22 @@ def get_average(values) -> float:
     return avg / len(values)
 
 
-def print_summary_table(avg_g_forces, energy_losses):
-    line_num = 1
+def print_summary_table_1(avg_g_forces, energy_losses):
     print("Printing Table 1\n")
     print("% 30s% 30s% 30s" % ("Release point Number", "Average G Force", "Energy Loss (Joules)"))
     print("------------------------------------------------------------------------------------------")
     for i in range(0, len(avg_g_forces)):
-        print("% 30d% 30f% 30f" % (line_num, avg_g_forces[i], energy_losses[i]))
-        line_num += 1
+        print("% 30d% 30f% 30f" % (i + 1, avg_g_forces[i], energy_losses[i]))
+
+    print("------------------------------------------------------------------------------------------")
+
+
+def print_summary_table_2(energy_loss, avg_g_forces, energy_loss_actual):
+    print("Printing Table 2\n")
+    print("% 30s% 30s% 30s% 30s" % ("Release Point", "E-Loss Calc (J)", "Average G Force", "Energy Loss actual - calc (J)"))
+    print("------------------------------------------------------------------------------------------")
+    for i in range(0, len(energy_loss)):
+        print("% 30d% 30f% 30f% 30f" % (i + 1, energy_loss[i], avg_g_forces[i], energy_loss_actual[i]))
 
     print("------------------------------------------------------------------------------------------")
 
@@ -145,7 +153,7 @@ print("Average G Force: % f" % avg_g_force)
 
 # Print table 1
 print()
-print_summary_table(energy_losses, avg_g_forces)
+print_summary_table_1(energy_losses, avg_g_forces)
 
 # Plot energy losses versus inlet velocity for each release point
 make_plot("Plot 1", energy_losses, inlet_velocities, "inlet velocity", "energy loss")
