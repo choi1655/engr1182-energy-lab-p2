@@ -6,6 +6,7 @@
 # ====================================================================
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 
 # ====================================================================
 # CONSTANTS
@@ -45,43 +46,46 @@ def get_average(values) -> float:
 
 
 def print_summary_table_1(avg_g_forces, energy_losses):
-    print("Printing Table 1\n")
-    print("% 30s% 30s% 30s" % ("Release point Number", "Average G Force", "Energy Loss (Joules)"))
-    print("------------------------------------------------------------------------------------------")
+    print("Printing Table 1...\n")
+    print("% 20s% 30s% 30s" % ("Release point Number", "Average G Force", "Energy Loss (Joules)"))
+    print("--------------------------------------------------------------------------------")
     for i in range(0, len(avg_g_forces)):
-        print("% 30d% 30f% 30f" % (i + 1, avg_g_forces[i], energy_losses[i]))
+        print("% 20d% 30f% 30f" % (i + 1, avg_g_forces[i], energy_losses[i]))
 
-    print("------------------------------------------------------------------------------------------")
+    print("--------------------------------------------------------------------------------")
 
 
 def print_summary_table_2(energy_loss, avg_g_forces, energy_loss_actual):
-    print("Printing Table 2\n")
-    print("% 30s% 30s% 30s% 30s" % (
-    "Release Point", "E-Loss Calc (J)", "Average G Force", "Energy Loss actual - calc (J)"))
-    print("------------------------------------------------------------------------------------------")
+    print("Printing Table 2...\n")
+    print("% 20s% 30s% 30s% 40s" % (
+        "Release Point", "E-Loss Calc (J)", "Average G Force", "Energy Loss actual - calc (J)"))
+    print("------------------------------------------------------------------------------------------------------------------------")
     for i in range(0, len(energy_loss)):
-        print("% 30d% 30f% 30f% 30f" % (i + 1, energy_loss[i], avg_g_forces[i], energy_loss_actual[i]))
+        print("% 20d% 30f% 30f% 40f" % (i + 1, energy_loss[i], avg_g_forces[i], energy_loss_actual[i]))
 
-    print("------------------------------------------------------------------------------------------")
+    print("------------------------------------------------------------------------------------------------------------------------")
 
 
 def make_plot(name, x, y, x_label, y_label):
     """
-    Plot values with graph title name, x label, and y label using x and y values passed in.
+    Plot values with graph title name, x label, and y label using x and y values passed in. Exports the graph to pdf.
     :param name: title of the graph
     :param x: horizontal axis values
     :param y: vertical axis values
     :param x_label: label for horizontal axis
     :param y_label: label for vertical axis
     """
-    # plot the points and line of best fit
-    plt.plot(np.unique(x), np.poly1d(np.polyfit(x, y, 1))(np.unique(x)))
-    # label the x and y axis
-    plt.xlabel(x_label)
-    plt.ylabel(y_label)
-    # title of the graph
-    plt.title(name)
-    plt.show()
+    path = "./" + name + ".pdf"
+    with PdfPages(path) as export_pdf:
+        # plot the points and line of best fit
+        plt.plot(np.unique(x), np.poly1d(np.polyfit(x, y, 1))(np.unique(x)))
+        # label the x and y axis
+        plt.xlabel(x_label)
+        plt.ylabel(y_label)
+        # title of the graph
+        plt.title(name)
+        export_pdf.savefig()
+        plt.show()
 
 
 # ====================================================================
@@ -91,6 +95,7 @@ def make_plot(name, x, y, x_label, y_label):
 avg_g_forces = []
 energy_losses = []
 inlet_velocities = []
+outlet_velocities = []
 radii = [0.23, 0.2225, 0.25, 0.205]
 avg_radius = get_average(radii)
 # Release point 1
@@ -100,6 +105,7 @@ sensor_2_velocities = [0.483333333, 0.833333333, 0.973333333, 1.0833333]
 avg_sensor_1 = get_average(sensor_1_velocities)
 avg_sensor_2 = get_average(sensor_2_velocities)
 inlet_velocities.append(avg_sensor_1)
+outlet_velocities.append(avg_sensor_2)
 energy_loss = calculate_energy_loss(avg_sensor_1, avg_sensor_2)
 print("Energy loss: % f" % energy_loss)
 energy_losses.append(energy_loss)
@@ -115,6 +121,7 @@ sensor_2_velocities = [0.833333, 0.87, 0.736667, 1.086667, 0.97]
 avg_sensor_1 = get_average(sensor_1_velocities)
 avg_sensor_2 = get_average(sensor_2_velocities)
 inlet_velocities.append(avg_sensor_1)
+outlet_velocities.append(avg_sensor_2)
 energy_loss = calculate_energy_loss(avg_sensor_1, avg_sensor_2)
 print("Energy loss: % f" % energy_loss)
 energy_losses.append(energy_loss)
@@ -130,6 +137,7 @@ sensor_2_velocities = [0.97333333, 0.9233333, 0.96, 1.22, 1.1033333]
 avg_sensor_1 = get_average(sensor_1_velocities)
 avg_sensor_2 = get_average(sensor_2_velocities)
 inlet_velocities.append(avg_sensor_1)
+outlet_velocities.append(avg_sensor_2)
 energy_loss = calculate_energy_loss(avg_sensor_1, avg_sensor_2)
 print("Energy loss: % f" % energy_loss)
 energy_losses.append(energy_loss)
@@ -145,6 +153,7 @@ sensor_2_velocities = [1.0833333, 1.1866667, 1.103333, 1.2766667, 1.353333]
 avg_sensor_1 = get_average(sensor_1_velocities)
 avg_sensor_2 = get_average(sensor_2_velocities)
 inlet_velocities.append(avg_sensor_1)
+outlet_velocities.append(avg_sensor_2)
 energy_loss = calculate_energy_loss(avg_sensor_1, avg_sensor_2)
 print("Energy loss: % f" % energy_loss)
 energy_losses.append(energy_loss)
@@ -154,9 +163,20 @@ print("Average G Force: % f" % avg_g_force)
 
 # Print table 1
 print()
-print_summary_table_1(energy_losses, avg_g_forces)
+print_summary_table_1(avg_g_forces, energy_losses)
 
 # Plot energy losses versus inlet velocity for each release point
 make_plot("Plot 1", energy_losses, inlet_velocities, "inlet velocity", "energy loss")
 # Plot values of energy loss versus average G force
 make_plot("Plot 2", avg_g_forces, energy_losses, "average G force", "energy loss")
+
+# Energy losses from spreadsheets, release points 1 to 4 in order
+energy_losses_from_spreadsheet = [0.002, 0.002, 0.002, 0.003]
+for i in range(0, len(energy_losses)):
+    energy_losses_from_spreadsheet[i] = energy_losses[i] - energy_losses_from_spreadsheet[i]
+
+# Plot values of "energy loss actual-calc" versus average G-force obtained for each configuration, Plot 3
+make_plot("Plot 3", avg_g_forces, energy_losses_from_spreadsheet, "average G force", "energy loss actual-calc")
+
+# print table 2
+print_summary_table_2(energy_losses, avg_g_forces, energy_losses_from_spreadsheet)
